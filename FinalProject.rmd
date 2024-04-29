@@ -18,33 +18,36 @@ When you click the **Knit** button a document will be generated that includes bo
 States <- read.csv("/Users/sushantkunwar/Downloads/archive (1)/states_all_extended.csv")
 View(States)
 
+
+```
+
 ## Data Cleaning
+```{r}
+#making the row numbers the state name
+rownames(States) <- States$STATE
+
+#Removing the PRIMARY_KEY and STATE columns as it'll be redundant/confusing later
+States <- States[ ,-1]
+States <- States[ ,-1]
+View(States)
 
 #Creating a data frame for data from just 1992
 States1992 <- States[c(1:51), ]
 View(States1992)
 
-#Creating a data frame for data from just 2015
+#Creating a data frame for data from just 2016
 States2015 <- States[c(1174:1224), ]
 View(States2015)
 
 #making the row numbers the state name
-rownames(States1992) <- States1992$STATE
+rownames(States) <- States$STATE
 
-#Removing the PRIMARY_KEY COLUMN as it'll be redundant/confusing later
-States1992 <- States1992[ ,-1]
+#Removing Columns with all NAs
+States1992 <- States1992[,colSums(is.na(States1992)) < nrow(States1992)]
 View(States1992)
 
-#adding state Abbreviation(work in progress)
-States1992$STATE_ABB <- state.abb[match(States1992$STATE, state.name)]
+States1992 <- States1992[,colSums(is.na(States1992)) < nrow(States1992)]
 View(States1992)
-States1992$STATE_ABB
-?state.abb
-
-
-
-
-
 
 ## section choosing higher value for GRADES_ALL and ENROLL 
 
