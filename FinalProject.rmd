@@ -19,6 +19,16 @@ States <- read.csv("/Users/sushantkunwar/Downloads/archive (1)/states_all_extend
 View(States)
 ```
 
+
+```{r}
+States1992 <- States[c(1:51), ]
+View(States1992)
+
+States2016 <- States[c(1225:1275), ]
+View(States2016)
+```
+
+
 ## Including Plots
 
 You can also embed plots, for example:
@@ -33,16 +43,25 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 Sections of the Report
 • Introduction (Background, motivation) – not more than a short paragraph.
 
+In this project, we aim to analyze a comprehensive dataset that encapsulates various dimensions of U.S. education data, consolidating financial, demographic, and academic performance indicators at the state level into a single accessible format. The dataset, drawn from multiple authoritative sources, includes detailed breakdowns by race, gender, and grade level, alongside revenue and expenditure figures. By focusing on data from the years 1992 and 2016, we intend to explore changes and trends over time, providing insights into the evolution of educational environments across the states. This analysis not only seeks to uncover underlying patterns in educational achievement and funding but also to highlight areas of progress and ongoing challenges within the U.S. educational system.
+
 • DATA: Make a LIST of all variables you actually use – describe units, anything I should
 know. Ignore variables you don’t discuss.
+YEAR
+STATE
+GRADES_ALL: Total Enrollment
 
 • Data cleaning process – describe the cleaning process you used on your data. Talk
 about what issues you encountered. It’s ok if your data was already relatively clean.
+
+**Cleaning Plan**
+Update our working dataframes to be just the columns we will use in our tests
 
 • Descriptive Plots, summary information. Plots should be clearly labeled, well formatted,
 and display an aesthetic sense.
 
 • Analysis – see below
 
+• Conclusions and Summary – a short paragraph.
 • Conclusions and Summary – a short paragraph.
 
