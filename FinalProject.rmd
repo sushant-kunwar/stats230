@@ -18,14 +18,31 @@ When you click the **Knit** button a document will be generated that includes bo
 States <- read.csv("/Users/sushantkunwar/Downloads/archive (1)/states_all_extended.csv")
 View(States)
 ```
-
-
+## Data Cleaning
 ```{r}
+#Creating a data frame for data from just 1992
 States1992 <- States[c(1:51), ]
 View(States1992)
 
+#Creating a data frame for data from just 2016
 States2016 <- States[c(1225:1275), ]
 View(States2016)
+
+#making the row numbers the state name
+rownames(States1992) <- States1992$STATE
+
+#Removing the PRIMARY_KEY COLUMN as it'll be redundant/confusing later
+States1992 <- States1992[ ,-1]
+View(States1992)
+
+#adding state Abbreviation(work in progress)
+States1992$STATE_ABB <- state.abb[match(States1992$STATE, state.name)]
+View(States1992)
+States1992$STATE_ABB
+?state.abb
+
+
+
 ```
 
 
@@ -63,5 +80,3 @@ and display an aesthetic sense.
 • Analysis – see below
 
 • Conclusions and Summary – a short paragraph.
-• Conclusions and Summary – a short paragraph.
-
