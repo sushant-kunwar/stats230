@@ -23,9 +23,21 @@ View(States)
 
 ## Data Cleaning
 ```{r}
+
 #Creating a Unified ENROLLMENT column by taking the max of 2 Columns with data from different sources(ENROLL & A_A_A)
 States$ENROLLMENT <- pmax(States$A_A_A, States$ENROLL, na.rm = T)
 View(States)
+
+#New Variable: Proportional Instruction Expenditure
+States$PROP_INSTRUCTION_EXPENDITURE <- States$INSTRUCTION_EXPENDITURE / States$TOTAL_EXPENDITURE
+
+#New Variable: Difference between Male and Female Math Scores in Grade 8(M-F)
+States$MATH_GENDER_DIF <- States$G08_A_M_MATHEMATICS - States$G08_A_F_MATHEMATICS
+
+#Rename Variables:
+States$AVG_MATH <- States$G08_A_A_MATHEMATICS
+States$AVG_MATH_M <- States$G08_A_M_MATHEMATICS
+States$AVG_MATH_F <- States$G08_A_F_MATHEMATICS
 
 #Creating a data frame for data from just 1992
 States1992 <- States[c(1:51), ]
@@ -34,8 +46,6 @@ View(States1992)
 #Creating a data frame for data from just 2016
 States2015 <- States[c(1174:1224), ]
 View(States2015)
-
-
 
 #making the row numbers the state name 1992
 rownames(States1992) <- States1992$STATE
@@ -54,21 +64,14 @@ States2015 <- States2015[ ,-1]
 View(States2015)
 
 #Removing Columns with all NAs
-States1992 <- States1992[,colSums(is.na(States1992)) < nrow(States1992)]
+States1992 <- States1992[ ,colSums(is.na(States1992)) < nrow(States1992)]
 View(States1992)
 
-States2015 <- States2015[,colSums(is.na(States2015)) < nrow(States2015)]
+States2015 <- States2015[ ,colSums(is.na(States2015)) < nrow(States2015)]
 View(States2015)
 
-#New Variable: Proportional Instruction Expenditure
-States$PROP_INSTRUCTION_EXPENDITURE <- States$INSTRUCTION_EXPENDITURE / States$TOTAL_EXPENDITURE
-
-#New Variable: Difference between Male and Female Math Scores in Grade 8(M-F)
-States$SCORE_GENDER_DIF <- States$G08_A_M_MATHEMATICS - States$G08_A_F_MATHEMATICS
-
-
-
 ```
+Our data cleaning process was relatively simple. The data set we picked contains information for all states in rows, however there are multiple years worth of data. To keep our process smooth we decided to pick two years worth of data(1992 and 2015). We made separate data frames for these two years so that each row was an individual state in both data frames with no repeats for states. This also allowed us to use the 'rownames' to make the rows just be the state names instead of a number, allowing us to remove redundant columns such as PRIMARY_KEY(the state and year of data) and STATE(the state name). Additionally, our data set contained redundant columns for enrollment data which slightly differed as well. To fix this we used the 'pmax' function to take the max of the two columns and store it into a new ENROLLMENT column that we will use. We renamed a few of the variables we planned on using with particularly confusing names. Then, for both of the data frames, we removed the columns with all NA values suing 'colSums' and 'is.na'. With this, we had our data organized and structured in a way that would allow for us to better visualize and analyze it.
 
 
 ## Including Plots
