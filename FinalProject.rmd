@@ -23,12 +23,8 @@ View(States)
 
 ## Data Cleaning
 ```{r}
-#making the row numbers the state name
-rownames(States) <- States$STATE
-
-#Removing the PRIMARY_KEY and STATE columns as it'll be redundant/confusing later
-States <- States[ ,-1]
-States <- States[ ,-1]
+#Creating a Unified ENROLLMENT column by taking the max of 2 Columns with data from different sources(ENROLL & A_A_A)
+States$ENROLLMENT <- pmax(States$A_A_A, States$ENROLL, na.rm = T)
 View(States)
 
 #Creating a data frame for data from just 1992
@@ -39,17 +35,36 @@ View(States1992)
 States2015 <- States[c(1174:1224), ]
 View(States2015)
 
-#making the row numbers the state name
-rownames(States) <- States$STATE
+
+
+#making the row numbers the state name 1992
+rownames(States1992) <- States1992$STATE
+
+#Removing the PRIMARY_KEY and STATE columns as it'll be redundant/confusing later 1992
+States1992 <- States1992[ ,-1]
+States1992 <- States1992[ ,-1]
+View(States1992)
+
+#making the row numbers the state name 2015
+rownames(States2015) <- States2015$STATE
+
+#Removing the PRIMARY_KEY and STATE columns as it'll be redundant/confusing later 2015
+States2015 <- States2015[ ,-1]
+States2015 <- States2015[ ,-1]
+View(States2015)
 
 #Removing Columns with all NAs
 States1992 <- States1992[,colSums(is.na(States1992)) < nrow(States1992)]
 View(States1992)
 
-States1992 <- States1992[,colSums(is.na(States1992)) < nrow(States1992)]
-View(States1992)
+States2015 <- States2015[,colSums(is.na(States2015)) < nrow(States2015)]
+View(States2015)
 
-## section choosing higher value for GRADES_ALL and ENROLL 
+#New Variable: Proportional Instruction Expenditure
+States$PROP_INSTRUCTION_EXPENDITURE <- States$INSTRUCTION_EXPENDITURE / States$TOTAL_EXPENDITURE
+
+#New Variable: Difference between Male and Female Math Scores in Grade 8(M-F)
+States$SCORE_GENDER_DIF <- States$G08_A_M_MATHEMATICS - States$G08_A_F_MATHEMATICS
 
 
 
