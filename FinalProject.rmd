@@ -14,6 +14,19 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
+## Load Libraries
+```{r, message = FALSE}
+library(car)
+library(leaps)
+library(lubridate)
+library(rvest)
+library(olsrr)
+library(corrplot)
+library(leaps)
+library(MASS)
+source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
+```
+
 ```{r}
 States <- read.csv("/Users/sushantkunwar/Downloads/archive (1)/states_all_extended.csv")
 View(States)
