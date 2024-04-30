@@ -142,7 +142,24 @@ boxplot(States2015$AVG_MATH_M, States2015$AVG_MATH_F, main = "Box plot of Avg ma
 ```
 Mention which state is the crazy outlier
 
+## Plots
 
+```{r, echo=FALSE}
+
+hist(States1992$MATH_GENDER_DIF)
+hist(States2015$MATH_GENDER_DIF)
+
+qqPlot(States1992$MATH_GENDER_DIF)
+qqPlot(States2015$MATH_GENDER_DIF)
+
+```
+
+## Tests
+
+```{r}
+t.test(States1992$AVG_MATH_M, States1992$AVG_MATH_F)
+t.test(States2015$AVG_MATH_M, States2015$AVG_MATH_F)
+```
 
 
 
