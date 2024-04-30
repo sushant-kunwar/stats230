@@ -14,6 +14,13 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
+
+```{r}
+States <- read.csv("/Users/sushantkunwar/Downloads/archive (1)/states_all_extended.csv")
+View(States)
+
+
+```
 ## Load Libraries
 ```{r, message = FALSE}
 library(car)
@@ -25,13 +32,6 @@ library(corrplot)
 library(leaps)
 library(MASS)
 source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
-```
-
-```{r}
-States <- read.csv("/Users/sushantkunwar/Downloads/archive (1)/states_all_extended.csv")
-View(States)
-
-
 ```
 
 ## Data Cleaning
@@ -86,16 +86,38 @@ View(States2015)
 ```
 Our data cleaning process was relatively simple. The data set we picked contains information for all states in rows, however there are multiple years worth of data. To keep our process smooth we decided to pick two years worth of data(1992 and 2015). We made separate data frames for these two years so that each row was an individual state in both data frames with no repeats for states. This also allowed us to use the 'rownames' to make the rows just be the state names instead of a number, allowing us to remove redundant columns such as PRIMARY_KEY(the state and year of data) and STATE(the state name). Additionally, our data set contained redundant columns for enrollment data which slightly differed as well. To fix this we used the 'pmax' function to take the max of the two columns and store it into a new ENROLLMENT column that we will use. We renamed a few of the variables we planned on using with particularly confusing names. Then, for both of the data frames, we removed the columns with all NA values suing 'colSums' and 'is.na'. With this, we had our data organized and structured in a way that would allow for us to better visualize and analyze it.
 
+## Plots
 
-## Including Plots
+```{r, echo=FALSE}
 
-You can also embed plots, for example:
+#Scatter plot comparing total instruction expenditure and avg math score (1992 and 2015)
+plot(States1992$AVG_MATH ~ States1992$INSTRUCTION_EXPENDITURE, main = "Average Math Score", xlab = "Plot of Total Expenditure vs Avg Math Score in 1992", ylab = "Total Expenditure", pch = 19)
+plot(States2015$AVG_MATH ~ States2015$INSTRUCTION_EXPENDITURE, main = "Average Math Score", xlab = "Plot of Total Expenditure vs Avg Math Score in 2015", ylab = "Total Expenditure", pch = 19)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+#Scatter plot comparing proportional expenditure and avg math score (1992 and 2015)
+plot(States1992$AVG_MATH ~ States1992$PROP_INSTRUCTION_EXPENDITURE, main = "Average Math Score", xlab = "Plot of Total Expenditure vs Avg Math Score in 1992", ylab = "Total Expenditure", pch = 19)
+plot(States2015$AVG_MATH ~ States2015$PROP_INSTRUCTION_EXPENDITURE, main = "Average Math Score", xlab = "Plot of Total Expenditure vs Avg Math Score in 2015", ylab = "Total Expenditure", pch = 19)
+
+
+boxplot(States1992$AVG_MATH_M, States1992$AVG_MATH_F, main = "Box plot of Avg math scores in 1992", xlab = "Gender", ylab = "Score", col = c("blue", "pink"))
+boxplot(States2015$AVG_MATH_M, States2015$AVG_MATH_F, main = "Box plot of Avg math scores in 2015", xlab = "Gender", ylab = "Score", col = c("blue", "pink"))
+#mention which state is crazy outlier
+
+hist(States1992$MATH_GENDER_DIF)
+hist(States2015$MATH_GENDER_DIF)
+
+qqPlot(States1992$MATH_GENDER_DIF)
+qqPlot(States2015$MATH_GENDER_DIF)
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Tests
+
+```{r}
+t.test(States1992$AVG_MATH_M, States1992$AVG_MATH_F)
+t.test(States2015$AVG_MATH_M, States2015$AVG_MATH_F)
+```
+
 
 
 Sections of the Report
@@ -132,54 +154,8 @@ Update our working dataframes to be just the columns we will use in our tests
 
 • Descriptive Plots, summary information. Plots should be clearly labeled, well formatted,
 and display an aesthetic sense.
-PLOTS AND MAYBE IF THINGS WERENT STASTISTICALLY DIFFERENT THEN THEY ENDED UP BEING
-
-```{r}
-#Scatter plot comparing total instruction expenditure and avg math score (1992 and 2015)
-plot(States1992$AVG_MATH ~ States1992$INSTRUCTION_EXPENDITURE, main = "Average Math Score", xlab = "Plot of Total Expenditure vs Avg Math Score in 1992", ylab = "Total Expenditure", pch = 19)
-
-plot(States2015$AVG_MATH ~ States2015$INSTRUCTION_EXPENDITURE, main = "Average Math Score", xlab = "Plot of Total Expenditure vs Avg Math Score in 2015", ylab = "Total Expenditure", pch = 19)
-```
-```{r}
-#Scatter plot comparing proportional expenditure and avg math score (1992 and 2015)
-plot(States1992$AVG_MATH ~ States1992$PROP_INSTRUCTION_EXPENDITURE, main = "Average Math Score", xlab = "Plot of Total Expenditure vs Avg Math Score in 1992", ylab = "Total Expenditure", pch = 19)
-
-plot(States2015$AVG_MATH ~ States2015$PROP_INSTRUCTION_EXPENDITURE, main = "Average Math Score", xlab = "Plot of Total Expenditure vs Avg Math Score in 2015", ylab = "Total Expenditure", pch = 19)
-```
-
-```{r}
-boxplot(States1992$AVG_MATH_M, States1992$AVG_MATH_F, main = "Box plot of Avg math scores in 1992", xlab = "Gender", ylab = "Score", col = c("blue", "pink"))
-
-
-boxplot(States2015$AVG_MATH_M, States2015$AVG_MATH_F, main = "Box plot of Avg math scores in 2015", xlab = "Gender", ylab = "Score", col = c("blue", "pink"))
-```
-Mention which state is the crazy outlier
-
-## Plots
-
-```{r, echo=FALSE}
-
-hist(States1992$MATH_GENDER_DIF)
-hist(States2015$MATH_GENDER_DIF)
-
-qqPlot(States1992$MATH_GENDER_DIF)
-qqPlot(States2015$MATH_GENDER_DIF)
-
-```
-
-## Tests
-
-```{r}
-t.test(States1992$AVG_MATH_M, States1992$AVG_MATH_F)
-t.test(States2015$AVG_MATH_M, States2015$AVG_MATH_F)
-```
-
-
 
 • Analysis – see below
 *can analyze that theres a bigger gap in 8th grade test scores among men and women*
 
 • Conclusions and Summary – a short paragraph.
-
-
-
