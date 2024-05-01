@@ -114,9 +114,51 @@ qqPlot(States2015$MATH_GENDER_DIF)
 ## Tests
 
 ```{r}
+#T=Tests
 t.test(States1992$AVG_MATH_M, States1992$AVG_MATH_F)
 t.test(States2015$AVG_MATH_M, States2015$AVG_MATH_F)
+t.test(States1992$AVG_MATH, States2015$AVG_MATH)
+
+#Bootstrapped Confidence Interval Between Proportional Expenditures and MATH AVG SCORES
+N <- 51
+n_samp <- 10000
+
+corResults1992 <- rep(NA, n_samp)
+corResults2015 <- rep(NA, n_samp)
+
+for(i in 1:n_samp){
+  #get vector of rows in our fake sample
+  s <- sample(1:N, N , replace = T)
+  data1992 <- na.omit(States1992[s, ])
+  data2015 <- States2015[s, ]
+    
+  #Get bootstrapped correlation and regression slope
+  
+  corResults1992[i] <- cor(data1992$PROP_INSTRUCTION_EXPENDITURE, data1992$AVG_MATH)
+  corResults2015[i] <- cor(data2015$PROP_INSTRUCTION_EXPENDITURE, data2015$AVG_MATH)
+}
+ci1992 <- quantile(corResults1992, c(.025, .975), na.rm = T)
+ci2015 <- quantile(corResults2015, c(.025, .975), na.rm = T)
+
+print("1992 BootStrapped Correlations")
+ci1992
+print("2015 BootStrapped Correlations")
+ci2015
 ```
+
+```{r}
+hist(corResults1992, main = "Histogram of Bootstrapped Correlations(1992)", col = "purple", xlab = "Sample Correlations", breaks = 50)
+abline(v = ci1992, lwd = 3, col = "darkgreen")
+abline(v = cor.test(States1992$PROP_INSTRUCTION_EXPENDITURE, States1992$AVG_MATH)$conf.int, lwd = 3, col = "lightblue", lty = 2)
+legend("topleft", c("Paramteric CI", "Boot CI"), lwd = 4, col = c("lightblue", "darkgreen"), lty = c(2, 1))
+
+hist(corResults2015, main = "Histogram of Bootstrapped Correlations(2015)", col = "violet", xlab = "Sample Correlations", breaks = 50)
+abline(v = ci2015, lwd = 3, col = "darkgreen")
+abline(v = cor.test(States2015$PROP_INSTRUCTION_EXPENDITURE, States2015$AVG_MATH)$conf.int, lwd = 3, col = "lightblue", lty = 2)
+legend("topleft", c("Parametric CI", "Boot CI"), lwd = 4, col = c("lightblue", "darkgreen"), lty = c(2, 1))
+```
+
+
 
 
 
