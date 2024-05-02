@@ -86,17 +86,19 @@ View(States2015)
 ```
 Our data cleaning process was relatively simple. The data set we picked contains information for all states in rows, however there are multiple years worth of data. To keep our process smooth we decided to pick two years worth of data(1992 and 2015). We made separate data frames for these two years so that each row was an individual state in both data frames with no repeats for states. This also allowed us to use the 'rownames' to make the rows just be the state names instead of a number, allowing us to remove redundant columns such as PRIMARY_KEY(the state and year of data) and STATE(the state name). Additionally, our data set contained redundant columns for enrollment data which slightly differed as well. To fix this we used the 'pmax' function to take the max of the two columns and store it into a new ENROLLMENT column that we will use. We renamed a few of the variables we planned on using with particularly confusing names. Then, for both of the data frames, we removed the columns with all NA values suing 'colSums' and 'is.na'. With this, we had our data organized and structured in a way that would allow for us to better visualize and analyze it.
 
+
+
 ## Plots
 
 ```{r, echo=FALSE}
 
 #Scatter plot comparing total instruction expenditure and avg math score (1992 and 2015)
-plot(States1992$AVG_MATH ~ States1992$INSTRUCTION_EXPENDITURE, main = "Average Math Score", xlab = "Plot of Total Expenditure vs Avg Math Score in 1992", ylab = "Total Expenditure", pch = 19)
-plot(States2015$AVG_MATH ~ States2015$INSTRUCTION_EXPENDITURE, main = "Average Math Score", xlab = "Plot of Total Expenditure vs Avg Math Score in 2015", ylab = "Total Expenditure", pch = 19)
+plot(States1992$AVG_MATH ~ States1992$INSTRUCTION_EXPENDITURE, ylab = "Average Math Score", main = "Plot of Total  Expenditure on Instruction vs Avg Math Score in 1992", xlab = "Total Expenditure", pch = 19)
+plot(States2015$AVG_MATH ~ States2015$INSTRUCTION_EXPENDITURE, ylab = "Average Math Score", main = "Plot of Total Expenditure on Instruction vs Avg Math Score in 2015", xlab = "Total Expenditure", pch = 19)
 
 #Scatter plot comparing proportional expenditure and avg math score (1992 and 2015)
-plot(States1992$AVG_MATH ~ States1992$PROP_INSTRUCTION_EXPENDITURE, main = "Average Math Score", xlab = "Plot of Total Expenditure vs Avg Math Score in 1992", ylab = "Total Expenditure", pch = 19)
-plot(States2015$AVG_MATH ~ States2015$PROP_INSTRUCTION_EXPENDITURE, main = "Average Math Score", xlab = "Plot of Total Expenditure vs Avg Math Score in 2015", ylab = "Total Expenditure", pch = 19)
+plot(States1992$AVG_MATH ~ States1992$PROP_INSTRUCTION_EXPENDITURE, ylab = "Average Math Score", main = "Plot of Proportional Expenditure on Instruction vs Avg Math Score in 1992", xlab = "Proportional Expenditure", pch = 19)
+plot(States2015$AVG_MATH ~ States2015$PROP_INSTRUCTION_EXPENDITURE, ylab = "Average Math Score", main = "Plot of Proportional Expenditure on Instruction vs Avg Math Score in 2015", xlab = "Proportional Expenditure", pch = 19)
 
 
 boxplot(States1992$AVG_MATH_M, States1992$AVG_MATH_F, main = "Box plot of Avg math scores in 1992", xlab = "Gender", ylab = "Score", col = c("blue", "pink"))
@@ -110,6 +112,38 @@ qqPlot(States1992$MATH_GENDER_DIF)
 qqPlot(States2015$MATH_GENDER_DIF)
 
 ```
+
+*ANALYSIS OF PLOTS*
+Plot 1: This scatter plot shows the relationship between total expenditure on instruction and average math score in 1992. There appears to be a positive correlation, with higher expenditures generally associated with higher average math scores, though the relationship is not perfectly linear. The data points are widely scattered, suggesting substantial variability.
+
+Plot 2: This scatter plot displays the same variables as the previous one, but for the year 2015. Here, the positive correlation between total expenditure on instruction and average math score seems more pronounced, with the data points more tightly clustered around an upward-sloping trend line. The overall range of expenditures has also increased compared to 1992.
+
+
+Plot 3: This scatter plot displays the relationship between the proportional expenditure on instruction and average math score in 1992. Like the plot displaying the total expenditure, there is a positive correlation, but in this graph it is much more pronounced. This indicates that we can see a far stronger correlation when we take into account not just the size of the expenditure on instruction, but rather how much of the total expenditure goes to correlation. Here we can see that when a higher proportion of the budget goes to instruction, we would expect that the average math score would increase.
+
+Plot 4: The variables in this plot are the same as the previous plot, this plot just focuses on 2015. Just like the previous plot, this one demonstrates how we should take into account the proportion of the total expenditure that goes to instruction rather than just the total expenditure on instruction. The different sizes of different states will skew the data if we only focus on the total expenditure on instruction. We see a much stronger positive correlation in this plot.
+
+Plot 5: This box plot displays the average math scores accross all states in 1992, divided by gender. In this plot, both men and women have one outlier far below the other states with average scores below 240. It seems as though men have generally higher scores than women in math. The median, quartiles, min, and max are all higher for men then they are for women, indicating that men are performing better than women in math.
+
+Plot 6: This box plot displays the average math scores accross all states in 2015, divided by gender. In this plot, unlike in 1992, men have an outlier further below, but it is only at a score of 260. Furthermore, women actually have an outlier further ABOVE, which did not occur in 1992. Additionally, it actually seems as though men and women have similar math scores, but women have a higher mean. Based on this plot and the former, it seems as though while scores for both men and women increased, the scores for women certainly increased the most. 
+
+Plot 7: This histogram displays the frequency distribution of the states' math gender difference scores in 1992. The distribution looks pretty normal with a center at 0, but it still seems as though male scores tend to be higher since most states fall with a difference above 0 (meaning men have a higher score). Still, it seems more even than we would have believed from the box plots.
+
+Plot 8: This histogram displays the frequency distribution of the states' math gender difference scores in 2015. The distribution appears to be slightly skewed to the left, with the large majority of states falling below a difference of 0 (meaning that women tended to have a higher average score than men in. most states). This is certainly a change from 1992 where men had higher scores, but the data was more centered around 0 and normally distributed. This seems to be less normally distributed, as we will see in the qq plot.
+
+Plot 9: This graph depicts the quantiles of a standard normal distribution, with the x-axis representing the norm quantiles and the y-axis showing the states' 1992 math gender difference scores. The points closely follow the diagonal line, suggesting that the gender difference scores are approximately normally distributed.
+
+Plot 10: Similar to the previous graph, this one shows the quantiles of the states' 2015 math gender difference scores plotted against the norm quantiles. The points appear to deviate slightly from the diagonal line, indicating a potential departure from normality, though the deviation is relatively small.
+
+
+GENERAL ANALYSIS BASED ON PLOTS: 
+The analysis of math scores from 1992 to 2015 reveals interesting trends regarding the impact of instructional expenditure and the dynamics of gender differences in math performance across U.S. states. In 1992, a positive correlation between total expenditure on instruction and average math scores was evident, although the data points displayed considerable variability. This trend became more pronounced by 2015, where the correlation strengthened and the data points clustered more tightly around the upward-sloping trend line, suggesting a more consistent effect of increased instructional spending on math scores. Moreover, when adjusting for the proportion of total expenditure allocated to instruction rather than absolute values, both years showed an even stronger positive correlation. This underscores the importance of proportionate spending in instruction as a significant predictor of math performance, hinting at the effectiveness of targeted investments in educational resources.
+
+In terms of gender differences, the analysis offers a compelling narrative of change over time. In 1992, men generally outperformed women in math, as indicated by higher medians and quartiles in the box plot distributions and a predominance of states showing a positive gender difference in favor of men. By 2015, however, this gap had not only narrowed but in many cases reversed, with the box plots showing comparable performance between genders and histograms indicating a leftward skew in gender difference scores — women now outperformed men in most states. This shift is further supported by the quantile-quantile plots, which suggest a move towards a less normal distribution in 2015, reflecting the notable improvement in women’s math scores relative to men's. This change could be attributed to various educational and societal developments over the 23 years that have increasingly leveled the playing field in STEM-related fields.
+
+
+
+
 
 ## Tests
 
@@ -146,6 +180,18 @@ print("2015 BootStrapped Correlations")
 ci2015
 ```
 
+*ANALYSIS FROM TESTS* 
+
+The application of the Welch Two Sample t-test to assess gender differences in average math scores among states in 1992 and 2015 provides valuable insights into the evolution of educational outcomes. In 1992, the test yielded a t-value of 0.79624 with a degrees of freedom (df) of 81.902, resulting in a p-value of 0.4282. This high p-value indicates that the observed difference in average math scores between males and females (mean of x = 267.2857, mean of y = 265.5000) was not statistically significant. The confidence interval ranged from -2.675791 to 6.247219, spanning zero, further suggesting that the difference in means could feasibly be zero, thus supporting the null hypothesis that there is no significant difference between male and female math scores in 1992.
+
+Fast forward to 2015, the Welch t-test results mirror the conclusions drawn in 1992 regarding gender differences, with even stronger evidence supporting the null hypothesis. The t-value of -0.17853 and a df of 99.178 produced a p-value of 0.8587, demonstrating that the difference in math scores between genders (mean of x = 281.6471, mean of y = 281.9020) remained statistically insignificant. The 95% confidence interval for this difference, from -3.087821 to 2.578017, also includes zero. These results indicate a continued absence of gender disparities in math performance across states, consistent with the narrowing gap observed in descriptive statistics from the same year.
+
+Furthermore, examining the change in overall math scores from 1992 to 2015 across all states reveals a significant improvement. The Welch t-test comparing the average math scores of all states between these two years shows a substantial mean increase from 266.2857 in 1992 to 281.7255 in 2015. With a t-value of -8.2789 and a very small p-value close to zero, the test strongly rejects the null hypothesis, indicating a significant rise in math scores over this period. The confidence interval, ranging from -19.15833 to -11.72122, does not include zero, which solidifies the conclusion of a real, positive shift in educational performance.
+
+Lastly, bootstrapped correlations provide further context to these findings, showing a range of possible correlation values between the variables studied. For 1992, the correlation interval spans from -0.1571800 to 0.4839411, and for 2015, it adjusts slightly to -0.04643523 to 0.53185830. These intervals suggest a variability in the strength and direction of the correlations, reflecting the complex interplay of factors affecting math scores across states over time. Such variability underscores the importance of considering multiple analytical approaches to understand trends thoroughly, especially in educational data where numerous socio-economic factors can influence outcomes.
+
+
+
 ```{r}
 hist(corResults1992, main = "Histogram of Bootstrapped Correlations(1992)", col = "purple", xlab = "Sample Correlations", breaks = 50)
 abline(v = ci1992, lwd = 3, col = "darkgreen")
@@ -157,6 +203,8 @@ abline(v = ci2015, lwd = 3, col = "darkgreen")
 abline(v = cor.test(States2015$PROP_INSTRUCTION_EXPENDITURE, States2015$AVG_MATH)$conf.int, lwd = 3, col = "lightblue", lty = 2)
 legend("topleft", c("Parametric CI", "Boot CI"), lwd = 4, col = c("lightblue", "darkgreen"), lty = c(2, 1))
 ```
+Histogram 1 (1992): The histogram displays a distinct peak around 0.3, indicating a concentration of bootstrapped correlation values around that point. The parametric confidence interval (teal line) appears narrower compared to the bootstrap confidence interval (green line), suggesting a tighter estimation range. There are some extreme values on both tails of the distribution, though more pronounced on the positive side.
+Histogram 2 (2015): The distribution of bootstrapped correlations in 2015 exhibits a similar shape to the 1992 data, with a pronounced peak near 0.2. However, the peak appears slightly shifted to the left compared to 1992. The parametric confidence interval remains narrower than the bootstrap interval, consistent with the earlier observation. The tails of the distribution seem less extreme, particularly on the positive side, when compared to the 1992 data.
 
 
 
