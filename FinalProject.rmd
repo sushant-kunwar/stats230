@@ -58,15 +58,29 @@ TOTAL_EXPENDITURE: The total expenditure for the state. (in dollars)
 
 INSTRUCTION_EXPENDITURE: Expenditure going toward instruction (in dollars)
 
-PROP_INSTR_EXP: proportion instruction expenditure CREATE THIS ONE (JUST INSTRUCTION/TOTAL)
+PROP_INSTR_EXP: proportion instruction expenditure
 
-G08_A_A_MATHEMATICS: Average math score of eighth grade students
+AVG_MATH: Average math score of eighth grade students
 
-G08_A_M_MATHEMATICS: Average math score of eighth grade students that are classified as "male"
+AVG_MATH_M: Average math score of eighth grade students that are classified as "male"
 
-G08_A_F_MATHEMATICS: Average math score of eighth grade students that are classified as "female"
+AVG_MATH_F: Average math score of eighth grade students that are classified as "female"
 
 MATH_GENDER_DIF: CREATE THIS ONE (just G08_A_M_MATHEMATICS - G08_A_F_MATHEMATICS)
+
+SCORE_ASIAN: Average math score of eighth grade students that are classified as "Asian"
+
+SCORE_NATIVE_AM: Average math score of eighth grade students that are classified as "Native American"
+
+SCORE_HISPANIC_LATINO: Average math score of eighth grade students that are classified as "Hispanic/Latino"
+
+SCORE_BLACK: Average math score of eighth grade students that are classified as "Black"
+
+SCORE_WHITE: Average math score of eighth grade students that are classified as "White"
+
+SCORE_HAWAIIAN_PI: Average math score of eighth grade students that are classified as "Hawaiian Native/Pacific Islander"
+
+MULTIPLE_RACES: Average math score of eighth grade students that are classified as "Two or more races"
 
 
 
