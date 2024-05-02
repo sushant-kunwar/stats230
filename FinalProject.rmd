@@ -42,20 +42,31 @@ In this project, we aim to analyze a comprehensive dataset that encapsulates var
 
 **DATA**
 
-YEAR
-STATE
-GRADES_ALL: the NCES's estimate for students in the state
+YEAR: The year that the data is from
+
+STATE: The state that the data is from
+
 ENROLL: The U.S. Census Bureau's count for students in the state. Should be comparable to GRADES_ALL
+
 A_A_A (same as GRADES_ALL): Should be same data as above
-TOTAL REVENUE: The total amount of revenue for the state.
-TOTAL_EXPENDITURE: The total expenditure for the state.
-INSTRUCTION_EXPENDITURE: Expenditure going toward instruction
-*PROP_INSTR_EXP: proportion instruction expenditure CREATE THIS ONE (JUST INSTRUCTION/TOTAL)*
+
+ENROLLMENT: max of 2 Columns with data from different sources(ENROLL & A_A_A)
+
+TOTAL_REVENUE: The total amount of revenue for the state. (in dollars)
+
+TOTAL_EXPENDITURE: The total expenditure for the state. (in dollars)
+
+INSTRUCTION_EXPENDITURE: Expenditure going toward instruction (in dollars)
+
+PROP_INSTR_EXP: proportion instruction expenditure CREATE THIS ONE (JUST INSTRUCTION/TOTAL)
+
 G08_A_A_MATHEMATICS: Average math score of eighth grade students
+
 G08_A_M_MATHEMATICS: Average math score of eighth grade students that are classified as "male"
+
 G08_A_F_MATHEMATICS: Average math score of eighth grade students that are classified as "female"
-*G08_MATH_MFDiff: CREATE THIS ONE (just G08_A_M_MATHEMATICS - G08_A_F_MATHEMATICS)*
-*Scores_to_InstrExpenditure: CREATE THIS ONE, relates expenditure on instruction to test scores*
+
+MATH_GENDER_DIF: CREATE THIS ONE (just G08_A_M_MATHEMATICS - G08_A_F_MATHEMATICS)
 
 
 
@@ -141,6 +152,7 @@ plot(States1992$AVG_MATH ~ States1992$PROP_INSTRUCTION_EXPENDITURE, ylab = "Aver
 
 plot(States2015$AVG_MATH ~ States2015$PROP_INSTRUCTION_EXPENDITURE, ylab = "Average Math Score", main = "Plot of Proportional Expenditure on Instruction vs Avg Math Score in 2015", xlab = "Proportional Expenditure", pch = 19)
 ```
+
 *Plot 3: This scatter plot displays the relationship between the proportional expenditure on instruction and average math score in 1992. Like the plot displaying the total expenditure, there is a positive correlation, but in this graph it is much more pronounced. This indicates that we can see a far stronger correlation when we take into account not just the size of the expenditure on instruction, but rather how much of the total expenditure goes to correlation. Here we can see that when a higher proportion of the budget goes to instruction, we would expect that the average math score would increase.*
 
 *Plot 4: The variables in this plot are the same as the previous plot, this plot just focuses on 2015. Just like the previous plot, this one demonstrates how we should take into account the proportion of the total expenditure that goes to instruction rather than just the total expenditure on instruction. The different sizes of different states will skew the data if we only focus on the total expenditure on instruction. We see a much stronger positive correlation in this plot.*
@@ -252,3 +264,4 @@ Lastly, bootstrapped correlations provide further context to these findings, sho
 **Conclusions and Summary**
 
 *This comprehensive analysis of U.S. education data from 1992 to 2015 offers valuable insights into the dynamics of educational expenditure and academic performance at the state level. Our findings reveal a noticeable improvement in math scores over the period, underpinned by a stronger correlation between instructional spending and academic outcomes in 2015 compared to 1992. Particularly significant is the shift in gender performance in math; while men generally outscored women in 1992, the gap narrowed or even reversed in many states by 2015, highlighting a progressive change towards gender parity in education. Statistical tests confirm these observations, showing no significant gender-based differences in math scores by 2015. Furthermore, the analysis underscores the importance of proportional investment in instruction relative to total educational expenditure, suggesting that targeted funding is crucial for improving academic outcomes. These trends reflect broader educational advancements and shifts in policy focus over the twenty-three-year span, marking a positive shift towards more equitable and effective education systems across the U.S.*
+
