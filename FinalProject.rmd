@@ -93,6 +93,13 @@ States$MATH_GENDER_DIF <- States$G08_A_M_MATHEMATICS - States$G08_A_F_MATHEMATIC
 States$AVG_MATH <- States$G08_A_A_MATHEMATICS
 States$AVG_MATH_M <- States$G08_A_M_MATHEMATICS
 States$AVG_MATH_F <- States$G08_A_F_MATHEMATICS
+States$SCORE_ASIAN <- States$G08_AM_A_MATHEMATICS
+States$SCORE_NATIVE_AM <- States$G08_AS_A_MATHEMATICS
+States$SCORE_HISPANIC_LATINO <- States$G08_HI_A_MATHEMATICS
+States$SCORE_BLACK <- States$G08_BL_A_MATHEMATICS
+States$SCORE_WHITE <- States$G08_WH_A_MATHEMATICS
+States$SCORE_HAWAIIAN_PI <- States$G08_HP_A_MATHEMATICS
+States$SCORE_MULTIPLE_RACES <- States$G08_TR_A_MATHEMATICS
 
 #Creating a data frame for data from just 1992
 States1992 <- States[c(1:51), ]
@@ -237,7 +244,11 @@ legend("topleft", c("Parametric CI", "Boot CI"), lwd = 4, col = c("lightblue", "
 Histogram 1 (1992): The histogram displays a distinct peak around 0.3, indicating a concentration of bootstrapped correlation values around that point. The parametric confidence interval (teal line) appears narrower compared to the bootstrap confidence interval (green line), suggesting a tighter estimation range. There are some extreme values on both tails of the distribution, though more pronounced on the positive side.
 Histogram 2 (2015): The distribution of bootstrapped correlations in 2015 exhibits a similar shape to the 1992 data, with a pronounced peak near 0.2. However, the peak appears slightly shifted to the left compared to 1992. The parametric confidence interval remains narrower than the bootstrap interval, consistent with the earlier observation. The tails of the distribution seem less extreme, particularly on the positive side, when compared to the 1992 data.
 
-
+*ANCOVA TESTING*
+```{r}
+AOV <- aov(AVG_MATH ~ SCORE_ASIAN + SCORE_NATIVE_AM + SCORE_HISPANIC_LATINO + SCORE_BLACK + SCORE_WHITE + SCORE_HAWAIIAN_PI + SCORE_MULTIPLE_RACES, data = States2015)
+summary(AOV)
+```
 
 **ANALYSIS**
 
