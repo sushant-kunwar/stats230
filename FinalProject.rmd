@@ -20,6 +20,8 @@ When you click the **Knit** button a document will be generated that includes bo
 States <- read.csv("/Users/sushantkunwar/Downloads/archive (1)/states_all_extended.csv")
 ```
 
+
+
 ## Load Libraries
 ```{r, message = FALSE}
 library(car)
@@ -35,8 +37,7 @@ source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 
 **INTRODUCTION**
 
-In this project, we aim to analyze a comprehensive dataset that encapsulates various dimensions of U.S. education data, consolidating financial, demographic, and academic performance indicators at the state level into a single accessible format. The dataset, drawn from multiple authoritative sources, includes detailed breakdowns by race, gender, and grade level, alongside revenue and expenditure figures. By focusing on data from the years 1992 and 2015, we intend to explore changes and trends over time, providing insights into the evolution of educational environments across the states. This analysis not only seeks to uncover underlying patterns in educational achievement and funding but also to highlight areas of progress and ongoing challenges within the U.S. educational system.
-
+This project delves into an extensive dataset capturing a range of educational metrics across various U.S. states from the years 1992 and 2015, focusing on financial, demographic, and academic performance indicators. By comparing changes over these years, the project aims to shed light on trends and shifts in education funding, resource allocation, and student performance. Critical data points such as student enrollment figures, total revenue and expenditures for education, instructional expenditures, and standardized test scores in mathematics are analyzed to understand their interrelations and impact on educational outcomes. The introduction of calculated variables like proportional instruction expenditure and gender-specific performance differences further enriches the analysis, providing deeper insights into the dynamics of educational equity and efficacy over the observed period.
 
 
 **DATA**
@@ -136,9 +137,9 @@ plot(States1992$AVG_MATH ~ States1992$INSTRUCTION_EXPENDITURE, ylab = "Average M
 plot(States2015$AVG_MATH ~ States2015$INSTRUCTION_EXPENDITURE, ylab = "Average Math Score", main = "Plot of Total Expenditure on Instruction vs Avg Math Score in 2015", xlab = "Total Expenditure", pch = 19)
 ```
 
-*Plot 1: This scatter plot shows the relationship between total expenditure on instruction and average math score in 1992. There appears to be a positive correlation, with higher expenditures generally associated with higher average math scores, though the relationship is not perfectly linear. The data points are widely scattered, suggesting substantial variability.*
+*Plot 1: This scatter plot shows the relationship between total expenditure on instruction and average math score in 1992. There appears to be a positive correlation, with higher expenditures generally associated with higher average math scores, though the relationship is not perfectly linear. Specifically, most of the data points are concentrated in the upperleft of the plot, further hinting at the fact that this relationship is not linear.*
 
-*Plot 2: This scatter plot displays the same variables as the previous one, but for the year 2015. Here, the positive correlation between total expenditure on instruction and average math score seems more pronounced, with the data points more tightly clustered around an upward-sloping trend line. The overall range of expenditures has also increased compared to 1992.*
+*Plot 2: This scatter plot displays the same variables as the previous one, but for the year 2015. Here, there is a similar issue where the data does not appear linear and is concentrated in the upper left of the plot. This hints that we should probably use the proportional expenditure on instruction rather than just pure expenditure on instruction.*
 
 ```{r}
 #Scatter plot comparing proportional expenditure and avg math score (1992 and 2015)
@@ -147,7 +148,7 @@ plot(States1992$AVG_MATH ~ States1992$PROP_INSTRUCTION_EXPENDITURE, ylab = "Aver
 plot(States2015$AVG_MATH ~ States2015$PROP_INSTRUCTION_EXPENDITURE, ylab = "Average Math Score", main = "Plot of Proportional Expenditure on Instruction vs Avg Math Score in 2015", xlab = "Proportional Expenditure", pch = 19)
 ```
 
-*Plot 3: This scatter plot displays the relationship between the proportional expenditure on instruction and average math score in 1992. Like the plot displaying the total expenditure, there is a positive correlation, but in this graph it is much more pronounced. This indicates that we can see a far stronger correlation when we take into account not just the size of the expenditure on instruction, but rather how much of the total expenditure goes to correlation. Here we can see that when a higher proportion of the budget goes to instruction, we would expect that the average math score would increase.*
+*Plot 3: This scatter plot displays the relationship between the proportional expenditure on instruction and average math score in 1992. Like the plot displaying the total expenditure, there is a positive correlation, but in this graph it is much more pronounced and is more linear. Here we can see that when a higher proportion of the budget goes to instruction, we would expect that the average math score would increase.*
 
 *Plot 4: The variables in this plot are the same as the previous plot, this plot just focuses on 2015. Just like the previous plot, this one demonstrates how we should take into account the proportion of the total expenditure that goes to instruction rather than just the total expenditure on instruction. The different sizes of different states will skew the data if we only focus on the total expenditure on instruction. We see a much stronger positive correlation in this plot.*
 
@@ -248,8 +249,8 @@ abline(v = ci2015, lwd = 3, col = "darkgreen")
 abline(v = cor.test(States2015$PROP_INSTRUCTION_EXPENDITURE, States2015$AVG_MATH)$conf.int, lwd = 3, col = "lightblue", lty = 2)
 legend("topleft", c("Parametric CI", "Boot CI"), lwd = 4, col = c("lightblue", "darkgreen"), lty = c(2, 1))
 ```
-Histogram 1 (1992): The histogram displays a distinct peak around 0.3, indicating a concentration of bootstrapped correlation values around that point. The parametric confidence interval (teal line) appears narrower compared to the bootstrap confidence interval (green line), suggesting a tighter estimation range. There are some extreme values on both tails of the distribution, though more pronounced on the positive side.
-Histogram 2 (2015): The distribution of bootstrapped correlations in 2015 exhibits a similar shape to the 1992 data, with a pronounced peak near 0.2. However, the peak appears slightly shifted to the left compared to 1992. The parametric confidence interval remains narrower than the bootstrap interval, consistent with the earlier observation. The tails of the distribution seem less extreme, particularly on the positive side, when compared to the 1992 data.
+Histogram 1 (1992): The histogram displays a distinct peak just below .2, indicating a concentration of bootstrapped correlation values around that point. The parametric confidence interval (teal line) appears narrower compared to the bootstrap confidence interval (green line).
+Histogram 2 (2015): The distribution of bootstrapped correlations in 2015 exhibits a similar shape to the 1992 data, with a pronounced peak near 0.3. However, the peak appears slightly shifted to the right compared to 1992. The parametric confidence interval remains narrower than the bootstrap interval, consistent with the earlier observation. 
 
 *ANOVA TESTING*
 ```{r}
@@ -259,11 +260,7 @@ summary(AOV)
 
 myResPlots2(AOV)
 ```
-The ANOVA test examines the effect of different racial/ethnic groups on the math exam scores for 8th graders. The results show a statistically significant effect for the SCORE_HISPANIC_LATINO group (p = 0.02308) and the SCORE_WHITE group (p = 0.00633) at the 0.05 level. This suggests that the mean scores for Hispanic/Latino and White students differ significantly from the overall mean. However, the effects for Asian, Native American, Black, and Multiple Races groups are not statistically significant at the 0.05 level. The residual degrees of freedom (44) indicate a relatively small sample size, which may impact the power of the test to detect smaller effect sizes.
 
-The residuals appear to be randomly scattered around zero, indicating that the assumption of homoscedasticity (constant variance of residuals) is likely met. However, there seems to be a slight pattern where the residuals become more positive as the fitted values increase, suggesting a potential violation of the linearity assumption.
-
-The Q-Q plot shows a reasonably straight line, implying that the residuals follow a normal distribution. However, there are a few points at the tails that deviate from the line, indicating potential outliers or heavier tails than expected under normality. The District of Columbia appears to be an outlier with a large negative residual.
 
 
 **ANALYSIS**
@@ -273,7 +270,7 @@ The Q-Q plot shows a reasonably straight line, implying that the residuals follo
 
 The analysis of math scores from 1992 to 2015 reveals interesting trends regarding the impact of instructional expenditure and the dynamics of gender differences in math performance across U.S. states. In 1992, a positive correlation between total expenditure on instruction and average math scores was evident, although the data points displayed considerable variability. This trend became more pronounced by 2015, where the correlation strengthened and the data points clustered more tightly around the upward-sloping trend line, suggesting a more consistent effect of increased instructional spending on math scores. Moreover, when adjusting for the proportion of total expenditure allocated to instruction rather than absolute values, both years showed an even stronger positive correlation. This underscores the importance of proportionate spending in instruction as a significant predictor of math performance, hinting at the effectiveness of targeted investments in educational resources.
 
-In terms of gender differences, the analysis offers a compelling narrative of change over time. In 1992, men generally outperformed women in math, as indicated by higher medians and quartiles in the box plot distributions and a predominance of states showing a positive gender difference in favor of men. By 2015, however, this gap had not only narrowed but in many cases reversed, with the box plots showing comparable performance between genders and histograms indicating a leftward skew in gender difference scores — women now outperformed men in most states. This shift is further supported by the quantile-quantile plots, which suggest a move towards a less normal distribution in 2015, reflecting the notable improvement in women’s math scores relative to men's. This change could be attributed to various educational and societal developments over the 23 years that have increasingly leveled the playing field in STEM-related fields.
+In terms of gender differences, the analysis does show a change over time. In 1992, men generally outperformed women in math, as indicated by higher medians and quartiles in the box plot distributions and a predominance of states showing a positive gender difference in favor of men. By 2015, however, this gap had not only narrowed but in many cases reversed, with the box plots showing comparable performance between genders and histograms indicating a leftward skew in gender difference scores — women now outperformed men in most states. This shift is further supported by the quantile-quantile plots, which suggest a move towards a less normal distribution in 2015, reflecting the notable improvement in women’s math scores relative to men's. This change could be attributed to various educational and societal developments over the 23 years that have increasingly leveled the playing field in STEM-related fields.
 
 *ANALYSIS FROM TESTS* 
 
@@ -291,3 +288,4 @@ Lastly, bootstrapped correlations provide further context to these findings, sho
 **Conclusions and Summary**
 
 *This comprehensive analysis of U.S. education data from 1992 to 2015 offers valuable insights into the dynamics of educational expenditure and academic performance at the state level. Our findings reveal a noticeable improvement in math scores over the period, underpinned by a stronger correlation between instructional spending and academic outcomes in 2015 compared to 1992. Particularly significant is the shift in gender performance in math; while men generally outscored women in 1992, the gap narrowed or even reversed in many states by 2015, highlighting a progressive change towards gender parity in education. Statistical tests confirm these observations, showing no significant gender-based differences in math scores by 2015. Furthermore, the analysis underscores the importance of proportional investment in instruction relative to total educational expenditure, suggesting that targeted funding is crucial for improving academic outcomes. These trends reflect broader educational advancements and shifts in policy focus over the twenty-three-year span, marking a positive shift towards more equitable and effective education systems across the U.S.*
+
