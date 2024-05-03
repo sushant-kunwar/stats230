@@ -213,7 +213,27 @@ print("2015 BootStrapped Correlations")
 ci2015
 ```
 
+## Permutation Test
 
+```{r}
+set.seed(230)
+
+diff <- median(States2015$AVG_MATH_M) - median(States2015$AVG_MATH_F)
+diff
+
+n <- 10000 
+fdiff <- rep(NA, n)
+for (i in 1:n) {
+  fakegender <- sample(c("M", "F"), 51, replace = T)
+  fdiff[i] <- median(States2015$AVG_MATH_M[fakegender == "M"]) - median(States2015$AVG_MATH_F[fakegender == "F"])
+}
+
+hist(fdiff, main = "Permuted Sample Medians of Scores Between Genders", col = "blue", xlab = "Minute Difference", cex.main = .9)
+abline(v = diff, col = "red", lwd = 2)
+text(diff - 0.2, 750 , paste("Actual Diff in Medians =", round(diff,2)),srt = 90)
+pval <-mean(abs(fdiff) >= abs(diff))
+pval
+```
 
 *Bootstraps*
 
