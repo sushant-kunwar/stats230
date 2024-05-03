@@ -254,22 +254,7 @@ Histogram 2 (2015): The distribution of bootstrapped correlations in 2015 exhibi
 *ANOVA TESTING*
 ```{r}
 
-replaceNA <- function(x) {
-  replace(x, is.na(x), median(x, na.rm = TRUE))
-}
-
-
-States2015$SCORE_ASIAN <- replaceNA(States2015$SCORE_ASIAN)
-States2015$SCORE_NATIVE_AM <- replaceNA(States2015$SCORE_NATIVE_AM)
-States2015$SCORE_HISPANIC_LATINO <- replaceNA(States2015$SCORE_HISPANIC_LATINO)
-States2015$SCORE_BLACK <- replaceNA(States2015$SCORE_BLACK)
-States2015$SCORE_WHITE <- replaceNA(States2015$SCORE_WHITE)
-States2015$SCORE_HAWAIIAN_PI <- replaceNA(States2015$SCORE_HAWAIIAN_PI)
-States2015$SCORE_MULTIPLE_RACES <- replaceNA(States2015$SCORE_MULTIPLE_RACES)
-States2015$AVG_MATH <- replaceNA_with_median(States2015$AVG_MATH)
-
-
-AOV <- aov(AVG_MATH ~ SCORE_ASIAN + SCORE_NATIVE_AM + SCORE_HISPANIC_LATINO + SCORE_BLACK + SCORE_WHITE + SCORE_HAWAIIAN_PI + SCORE_MULTIPLE_RACES, data = States2015)
+AOV <- aov(AVG_MATH ~  SCORE_NATIVE_AM + SCORE_HISPANIC_LATINO + SCORE_BLACK + SCORE_WHITE + SCORE_MULTIPLE_RACES, data = States2015)
 summary(AOV)
 
 myResPlots2(AOV)
