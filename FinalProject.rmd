@@ -1,6 +1,8 @@
 ---
-title: "Final Porject"
-output: html_document
+title: "Final Project"
+output:
+  word_document: default
+  html_document: default
 date: "2024-04-29"
 ---
 
@@ -14,13 +16,10 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-
 ```{r}
 States <- read.csv("/Users/sushantkunwar/Downloads/archive (1)/states_all_extended.csv")
-View(States)
-
-
 ```
+
 ## Load Libraries
 ```{r, message = FALSE}
 library(car)
@@ -58,44 +57,22 @@ TOTAL_EXPENDITURE: The total expenditure for the state. (in dollars)
 
 INSTRUCTION_EXPENDITURE: Expenditure going toward instruction (in dollars)
 
-PROP_INSTR_EXP: proportion instruction expenditure
+PROP_INSTR_EXP: proportion instruction expenditure CREATE THIS ONE (JUST INSTRUCTION/TOTAL)
 
-AVG_MATH: Average math score of eighth grade students
+G08_A_A_MATHEMATICS: Average math score of eighth grade students
 
-AVG_MATH_M: Average math score of eighth grade students that are classified as "male"
+G08_A_M_MATHEMATICS: Average math score of eighth grade students that are classified as "male"
 
-AVG_MATH_F: Average math score of eighth grade students that are classified as "female"
+G08_A_F_MATHEMATICS: Average math score of eighth grade students that are classified as "female"
 
 MATH_GENDER_DIF: CREATE THIS ONE (just G08_A_M_MATHEMATICS - G08_A_F_MATHEMATICS)
 
-SCORE_ASIAN: Average math score of eighth grade students that are classified as "Asian"
-
-SCORE_NATIVE_AM: Average math score of eighth grade students that are classified as "Native American"
-
-SCORE_HISPANIC_LATINO: Average math score of eighth grade students that are classified as "Hispanic/Latino"
-
-SCORE_BLACK: Average math score of eighth grade students that are classified as "Black"
-
-SCORE_WHITE: Average math score of eighth grade students that are classified as "White"
-
-SCORE_HAWAIIAN_PI: Average math score of eighth grade students that are classified as "Hawaiian Native/Pacific Islander"
-
-MULTIPLE_RACES: Average math score of eighth grade students that are classified as "Two or more races"
-
-
-
-
-
-**DATA CLEANING PROCESS**
-
-
-```{r}
-States <- read.csv("/Users/poedoub/Desktop/states_all_extended.csv")
-## View(States)
+## Data Cleaning
+```{r echo = F}
 
 #Creating a Unified ENROLLMENT column by taking the max of 2 Columns with data from different sources(ENROLL & A_A_A)
 States$ENROLLMENT <- pmax(States$A_A_A, States$ENROLL, na.rm = T)
-#View(States)
+
 
 #New Variable: Proportional Instruction Expenditure
 States$PROP_INSTRUCTION_EXPENDITURE <- States$INSTRUCTION_EXPENDITURE / States$TOTAL_EXPENDITURE
@@ -117,11 +94,11 @@ States$SCORE_MULTIPLE_RACES <- States$G08_TR_A_MATHEMATICS
 
 #Creating a data frame for data from just 1992
 States1992 <- States[c(1:51), ]
-#View(States1992)
+
 
 #Creating a data frame for data from just 2016
 States2015 <- States[c(1174:1224), ]
-#View(States2015)
+
 
 #making the row numbers the state name 1992
 rownames(States1992) <- States1992$STATE
@@ -129,7 +106,7 @@ rownames(States1992) <- States1992$STATE
 #Removing the PRIMARY_KEY and STATE columns as it'll be redundant/confusing later 1992
 States1992 <- States1992[ ,-1]
 States1992 <- States1992[ ,-1]
-#View(States1992)
+
 
 #making the row numbers the state name 2015
 rownames(States2015) <- States2015$STATE
@@ -137,20 +114,16 @@ rownames(States2015) <- States2015$STATE
 #Removing the PRIMARY_KEY and STATE columns as it'll be redundant/confusing later 2015
 States2015 <- States2015[ ,-1]
 States2015 <- States2015[ ,-1]
-#View(States2015)
+
 
 #Removing Columns with all NAs
 States1992 <- States1992[ ,colSums(is.na(States1992)) < nrow(States1992)]
-#View(States1992)
+
 
 States2015 <- States2015[ ,colSums(is.na(States2015)) < nrow(States2015)]
-#View(States2015)
+
 
 ```
-Our data cleaning process was relatively simple. The data set we picked contains information for all states in rows, however there are multiple years worth of data. To keep our process smooth we decided to pick two years worth of data(1992 and 2015). We made separate data frames for these two years so that each row was an individual state in both data frames with no repeats for states. This also allowed us to use the 'rownames' to make the rows just be the state names instead of a number, allowing us to remove redundant columns such as PRIMARY_KEY(the state and year of data) and STATE(the state name). Additionally, our data set contained redundant columns for enrollment data which slightly differed as well. To fix this we used the 'pmax' function to take the max of the two columns and store it into a new ENROLLMENT column that we will use. We renamed a few of the variables we planned on using with particularly confusing names. Then, for both of the data frames, we removed the columns with all NA values suing 'colSums' and 'is.na'. With this, we had our data organized and structured in a way that would allow for us to better visualize and analyze it.
-
-
-
 **ALL PLOTS**
 
 *Plots*
@@ -258,26 +231,35 @@ legend("topleft", c("Parametric CI", "Boot CI"), lwd = 4, col = c("lightblue", "
 Histogram 1 (1992): The histogram displays a distinct peak around 0.3, indicating a concentration of bootstrapped correlation values around that point. The parametric confidence interval (teal line) appears narrower compared to the bootstrap confidence interval (green line), suggesting a tighter estimation range. There are some extreme values on both tails of the distribution, though more pronounced on the positive side.
 Histogram 2 (2015): The distribution of bootstrapped correlations in 2015 exhibits a similar shape to the 1992 data, with a pronounced peak near 0.2. However, the peak appears slightly shifted to the left compared to 1992. The parametric confidence interval remains narrower than the bootstrap interval, consistent with the earlier observation. The tails of the distribution seem less extreme, particularly on the positive side, when compared to the 1992 data.
 
-*ANCOVA TESTING*
+*ANOVA TESTING*
 ```{r}
-replaceNA_with_median <- function(x) {
+
+replaceNA <- function(x) {
   replace(x, is.na(x), median(x, na.rm = TRUE))
 }
 
-# Apply the function to each column that will be used in the ANOVA
-States2015$SCORE_ASIAN <- replaceNA_with_median(States2015$SCORE_ASIAN)
-States2015$SCORE_NATIVE_AM <- replaceNA_with_median(States2015$SCORE_NATIVE_AM)
-States2015$SCORE_HISPANIC_LATINO <- replaceNA_with_median(States2015$SCORE_HISPANIC_LATINO)
-States2015$SCORE_BLACK <- replaceNA_with_median(States2015$SCORE_BLACK)
-States2015$SCORE_WHITE <- replaceNA_with_median(States2015$SCORE_WHITE)
-States2015$SCORE_HAWAIIAN_PI <- replaceNA_with_median(States2015$SCORE_HAWAIIAN_PI)
-States2015$SCORE_MULTIPLE_RACES <- replaceNA_with_median(States2015$SCORE_MULTIPLE_RACES)
+
+States2015$SCORE_ASIAN <- replaceNA(States2015$SCORE_ASIAN)
+States2015$SCORE_NATIVE_AM <- replaceNA(States2015$SCORE_NATIVE_AM)
+States2015$SCORE_HISPANIC_LATINO <- replaceNA(States2015$SCORE_HISPANIC_LATINO)
+States2015$SCORE_BLACK <- replaceNA(States2015$SCORE_BLACK)
+States2015$SCORE_WHITE <- replaceNA(States2015$SCORE_WHITE)
+States2015$SCORE_HAWAIIAN_PI <- replaceNA(States2015$SCORE_HAWAIIAN_PI)
+States2015$SCORE_MULTIPLE_RACES <- replaceNA(States2015$SCORE_MULTIPLE_RACES)
 States2015$AVG_MATH <- replaceNA_with_median(States2015$AVG_MATH)
 
-# Run the ANOVA
+
 AOV <- aov(AVG_MATH ~ SCORE_ASIAN + SCORE_NATIVE_AM + SCORE_HISPANIC_LATINO + SCORE_BLACK + SCORE_WHITE + SCORE_HAWAIIAN_PI + SCORE_MULTIPLE_RACES, data = States2015)
 summary(AOV)
+
+myResPlots2(AOV)
 ```
+The ANOVA test examines the effect of different racial/ethnic groups on the math exam scores for 8th graders. The results show a statistically significant effect for the SCORE_HISPANIC_LATINO group (p = 0.02308) and the SCORE_WHITE group (p = 0.00633) at the 0.05 level. This suggests that the mean scores for Hispanic/Latino and White students differ significantly from the overall mean. However, the effects for Asian, Native American, Black, and Multiple Races groups are not statistically significant at the 0.05 level. The residual degrees of freedom (44) indicate a relatively small sample size, which may impact the power of the test to detect smaller effect sizes.
+
+The residuals appear to be randomly scattered around zero, indicating that the assumption of homoscedasticity (constant variance of residuals) is likely met. However, there seems to be a slight pattern where the residuals become more positive as the fitted values increase, suggesting a potential violation of the linearity assumption.
+
+The Q-Q plot shows a reasonably straight line, implying that the residuals follow a normal distribution. However, there are a few points at the tails that deviate from the line, indicating potential outliers or heavier tails than expected under normality. The District of Columbia appears to be an outlier with a large negative residual.
+
 
 **ANALYSIS**
 
@@ -304,4 +286,3 @@ Lastly, bootstrapped correlations provide further context to these findings, sho
 **Conclusions and Summary**
 
 *This comprehensive analysis of U.S. education data from 1992 to 2015 offers valuable insights into the dynamics of educational expenditure and academic performance at the state level. Our findings reveal a noticeable improvement in math scores over the period, underpinned by a stronger correlation between instructional spending and academic outcomes in 2015 compared to 1992. Particularly significant is the shift in gender performance in math; while men generally outscored women in 1992, the gap narrowed or even reversed in many states by 2015, highlighting a progressive change towards gender parity in education. Statistical tests confirm these observations, showing no significant gender-based differences in math scores by 2015. Furthermore, the analysis underscores the importance of proportional investment in instruction relative to total educational expenditure, suggesting that targeted funding is crucial for improving academic outcomes. These trends reflect broader educational advancements and shifts in policy focus over the twenty-three-year span, marking a positive shift towards more equitable and effective education systems across the U.S.*
-
