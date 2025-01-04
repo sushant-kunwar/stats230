@@ -1,6 +1,5 @@
 ---
 title: "Final Project"
-author: "Funny Guys"
 output:
   word_document: 
     reference_docx:
